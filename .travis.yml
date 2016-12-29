@@ -29,9 +29,7 @@ matrix:
   fast_finish: true
   allow_failures:
   - env: IMAGE_ARCH=armel
-  - env: IMAGE_ARCH=mips
   - env: IMAGE_ARCH=mips64el
-  - env: IMAGE_ARCH=mipsel
   - env: IMAGE_ARCH=ppc64el
   - env: IMAGE_ARCH=s390x
 
@@ -58,6 +56,7 @@ before_install:
   sudo docker run --detach --interactive --tty \
     --name test_container \
     -v ${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}}:${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}} \
+    --add-host dl.bintray.com:75.126.118.188 \
     laarid/devel:${IMAGE_ARCH} \
     /bin/bash
 
