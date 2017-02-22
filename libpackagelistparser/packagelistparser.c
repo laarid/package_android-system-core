@@ -24,10 +24,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <sys/limits.h>
+#include <limits.h>
 
 #define LOG_TAG "packagelistparser"
-#include <utils/Log.h>
+#include <log/log.h>
 
 #include <packagelistparser/packagelistparser.h>
 
@@ -78,8 +78,8 @@ static bool parse_gids(char *gids, gid_t *gid_list, size_t *cnt)
          * if unsigned long is greater than size of gid_t,
          * prevent a truncation based roll-over
          */
-        if (gid > GID_MAX) {
-            CLOGE("A gid in field \"gid list\" greater than GID_MAX");
+        if (gid > UINT_MAX) {
+            CLOGE("A gid in field \"gid list\" greater than UINT_MAX");
             return false;
         }
 
@@ -148,8 +148,8 @@ extern bool packagelist_parse(pfn_on_package callback, void *userdata)
          * if unsigned long is greater than size of uid_t,
          * prevent a truncation based roll-over
          */
-        if (tmp > UID_MAX) {
-            errmsg = "Field \"uid\" greater than UID_MAX";
+        if (tmp > UINT_MAX) {
+            errmsg = "Field \"uid\" greater than UINT_MAX";
             goto err;
         }
 

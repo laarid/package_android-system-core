@@ -382,6 +382,7 @@ AS_IF([test "x${with_stage}" = x1], [AC_CONFIG_FILES([
   liblog/android-log-$LAARID_API_VERSION.pc
   libmincrypt/android-mincrypt-$LAARID_API_VERSION.pc
   libnetutils/android-netutils-$LAARID_API_VERSION.pc
+  libpackagelistparser/android-packagelistparser-$LAARID_API_VERSION.pc
   libsparse/android-sparse-$LAARID_API_VERSION.pc
   libsuspend/android-suspend-$LAARID_API_VERSION.pc
   libsync/android-sync-$LAARID_API_VERSION.pc

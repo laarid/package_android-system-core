@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: android-packagelistparser-@LAARID_API_VERSION@
+Description: Android System Core Libraries - packagelistparser
+Version: @VERSION@
+Requires.private: android-log-@LAARID_API_VERSION@
+Libs: -L${libdir} -landroid-packagelistparser
+Cflags: -I${includedir}/android/system-core-@LAARID_API_VERSION@
+
