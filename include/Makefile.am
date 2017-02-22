@@ -192,7 +192,6 @@ endif # WITH_STAGE_2
 endif # WITH_STAGE_1
 
 EXTRA_DIST += \
-	%reldir%/private/android_filesystem_capability.h \
 	%reldir%/private/android_filesystem_config.h \
 	%reldir%/private/android_logger.h \
 	%reldir%/utils/Compat.h
