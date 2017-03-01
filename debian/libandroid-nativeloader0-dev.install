@@ -1,0 +1,4 @@
+usr/include/android/system-core-*/nativeloader/*
+usr/lib/*/libandroid-nativeloader.a
+usr/lib/*/libandroid-nativeloader.so
+usr/lib/*/pkgconfig/android-nativeloader-*.pc

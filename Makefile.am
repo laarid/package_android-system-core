@@ -103,6 +103,7 @@ if WITH_STAGE_2
 # Stage 2-1: depends on external packages that depend on stage 0 packages
 include $(srcdir)/libbacktrace/Android.mk
 include $(srcdir)/libnativebridge/Android.mk
+include $(srcdir)/libnativeloader/Android.mk
 
 # Stage 2-2: depends on any of above packages
 include $(srcdir)/libutils/Android.mk

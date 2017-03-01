@@ -393,6 +393,7 @@ AS_IF([test "x${with_stage}" = x1], [AC_CONFIG_FILES([
   [test "x${with_stage}" = x2], [AC_CONFIG_FILES([
   libbacktrace/android-backtrace-$LAARID_API_VERSION.pc
   libnativebridge/android-nativebridge-$LAARID_API_VERSION.pc
+  libnativeloader/android-nativeloader-$LAARID_API_VERSION.pc
   libpixelflinger/android-pixelflinger-$LAARID_API_VERSION.pc
   libprocessgroup/android-processgroup-$LAARID_API_VERSION.pc
   libutils/android-utils-$LAARID_API_VERSION.pc
