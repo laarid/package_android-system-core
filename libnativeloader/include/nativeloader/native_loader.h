@@ -17,7 +17,7 @@
 #ifndef NATIVE_LOADER_H_
 #define NATIVE_LOADER_H_
 
-#include "jni.h"
+#include "nativehelper/jni.h"
 #include <stdint.h>
 #include <android/dlext.h>
 
