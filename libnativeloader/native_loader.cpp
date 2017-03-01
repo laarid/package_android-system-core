@@ -18,12 +18,10 @@
 #include "ScopedUtfChars.h"
 
 #include <dlfcn.h>
-#ifdef __ANDROID__
 #include "dlext_namespaces.h"
 #include "cutils/properties.h"
 #define LOG_TAG "libnativeloader"
 #include "log/log.h"
-#endif
 
 #include <algorithm>
 #include <vector>
@@ -36,7 +34,6 @@
 
 namespace android {
 
-#if defined(__ANDROID__)
 static constexpr const char* kPublicNativeLibrariesSystemConfigPathFromRoot = "/etc/public.libraries.txt";
 static constexpr const char* kPublicNativeLibrariesVendorConfig = "/vendor/etc/public.libraries.txt";
 
@@ -230,20 +227,15 @@ class LibraryNamespaces {
 
 static std::mutex g_namespaces_mutex;
 static LibraryNamespaces* g_namespaces = new LibraryNamespaces;
-#endif
 
 void InitializeNativeLoader() {
-#if defined(__ANDROID__)
   std::lock_guard<std::mutex> guard(g_namespaces_mutex);
   g_namespaces->Initialize();
-#endif
 }
 
 void ResetNativeLoader() {
-#if defined(__ANDROID__)
   std::lock_guard<std::mutex> guard(g_namespaces_mutex);
   g_namespaces->Reset();
-#endif
 }
 
 jstring CreateClassLoaderNamespace(JNIEnv* env,
@@ -252,7 +244,6 @@ jstring CreateClassLoaderNamespace(JNIEnv* env,
                                    bool is_shared,
                                    jstring library_path,
                                    jstring permitted_path) {
-#if defined(__ANDROID__)
   UNUSED(target_sdk_version);
   std::lock_guard<std::mutex> guard(g_namespaces_mutex);
   android_namespace_t* ns = g_namespaces->Create(env,
@@ -263,10 +254,6 @@ jstring CreateClassLoaderNamespace(JNIEnv* env,
   if (ns == nullptr) {
     return env->NewStringUTF(dlerror());
   }
-#else
-  UNUSED(env, target_sdk_version, class_loader, is_shared,
-         library_path, permitted_path);
-#endif
   return nullptr;
 }
 
@@ -275,7 +262,6 @@ void* OpenNativeLibrary(JNIEnv* env,
                         const char* path,
                         jobject class_loader,
                         jstring library_path) {
-#if defined(__ANDROID__)
   UNUSED(target_sdk_version);
   if (class_loader == nullptr) {
     return dlopen(path, RTLD_NOW);
@@ -298,21 +284,15 @@ void* OpenNativeLibrary(JNIEnv* env,
   extinfo.library_namespace = ns;
 
   return android_dlopen_ext(path, RTLD_NOW, &extinfo);
-#else
-  UNUSED(env, target_sdk_version, class_loader, library_path);
-  return dlopen(path, RTLD_NOW);
-#endif
 }
 
 bool CloseNativeLibrary(void* handle) {
   return dlclose(handle) == 0;
 }
 
-#if defined(__ANDROID__)
 android_namespace_t* FindNamespaceByClassLoader(JNIEnv* env, jobject class_loader) {
   std::lock_guard<std::mutex> guard(g_namespaces_mutex);
   return g_namespaces->FindNamespaceByClassLoader(env, class_loader);
 }
-#endif
 
 }; //  android namespace
