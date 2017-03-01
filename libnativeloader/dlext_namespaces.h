@@ -17,7 +17,7 @@
 #ifndef __ANDROID_DLEXT_NAMESPACES_H__
 #define __ANDROID_DLEXT_NAMESPACES_H__
 
-#include <android/dlext.h>
+#include <dlfcn.h>
 
 __BEGIN_DECLS
 
@@ -79,12 +79,12 @@ enum {
  * If a library or any of its dependencies are outside of the permitted_when_isolated_path
  * and search_path, and it is not part of the public namespace dlopen will fail.
  */
-extern struct android_namespace_t* android_create_namespace(const char* name,
-                                                            const char* ld_library_path,
-                                                            const char* default_library_path,
-                                                            uint64_t type,
-                                                            const char* permitted_when_isolated_path,
-                                                            android_namespace_t* parent);
+extern Lmid_t android_create_namespace(const char* name,
+                                       const char* ld_library_path,
+                                       const char* default_library_path,
+                                       uint64_t type,
+                                       const char* permitted_when_isolated_path,
+                                       Lmid_t parent);
 
 __END_DECLS
 
