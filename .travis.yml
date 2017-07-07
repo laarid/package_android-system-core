@@ -65,22 +65,26 @@ install:
 - ${DOCKER_EXEC_ROOT} chown -R laarid:laarid ${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}}
 - ${DOCKER_EXEC_ROOT} apt-get update -qq
 - |
-  ${DOCKER_EXEC_ROOT} \
-    env "DEB_BUILD_PROFILES=pkg.$(cat debian/control | grep ^Source: | awk '{print $2}').stage${JOB_STAGE}" \
-    mk-build-deps --install --remove \
-      --host-arch ${JOB_ARCH} \
-      --root-cmd sudo \
-      --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y --allow-unauthenticated'
+  if test -z "${CI_DISABLE_STAGES}" || test ${JOB_STAGE} -le ${CI_DISABLE_STAGES}; then \
+    ${DOCKER_EXEC_ROOT} \
+      env "DEB_BUILD_PROFILES=pkg.$(cat debian/control | grep ^Source: | awk '{print $2}').stage${JOB_STAGE}" \
+      mk-build-deps --install --remove \
+        --host-arch ${JOB_ARCH} \
+        --root-cmd sudo \
+        --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y --allow-unauthenticated'; \
+  fi
 
 script:
 - |
-  ${DOCKER_EXEC} env \
-      "DEB_BUILD_OPTIONS=nocheck" \
-    dpkg-buildpackage \
-      --host-arch ${JOB_ARCH} \
-      --build-profiles=pkg.$(cat debian/control | grep ^Source: | awk '{print $2}').stage${JOB_STAGE},nocheck \
-      -i -us -uc -b;
-- ${DOCKER_EXEC} make -C build -j $(nproc) .gitignore distcheck
+  if test -z "${CI_DISABLE_STAGES}" || test ${JOB_STAGE} -le ${CI_DISABLE_STAGES}; then \
+    ${DOCKER_EXEC} env \
+        "DEB_BUILD_OPTIONS=nocheck" \
+      dpkg-buildpackage \
+        --host-arch ${JOB_ARCH} \
+        --build-profiles=pkg.$(cat debian/control | grep ^Source: | awk '{print $2}').stage${JOB_STAGE},nocheck \
+        -i -us -uc -b; \
+    ${DOCKER_EXEC} make -C build -j $(nproc) .gitignore distcheck; \
+  fi
 - git status
 - git status | grep 'working tree clean'
 
